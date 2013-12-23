@@ -35,62 +35,61 @@ Suggested milestones for incremental development:
 """
 
 def alpha(str):
-  print 'testing for:', str
-  if str.isdigit(): return str
-  return str[:str.find(' ')]
+    if str.isdigit(): return str
+    return str[:str.find(' ')]
 
 def extract_names(filename):
-  """
-  Given a file name for baby.html, returns a list starting with the year string
-  followed by the name-rank strings in alphabetical order.
-  ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
-  """
-  res = []
-  f = open(filename, 'rU')
-  str = f.read()
+    """
+    Given a file name for baby.html, returns a list starting with the year string
+    followed by the name-rank strings in alphabetical order.
+    ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
+    """
+    res = []
+    f = open(filename, 'rU')
+    str = f.read()
 
-  year = re.search(r'Popularity in (\d+)', str)
-  year = year.group(1)
-  res.append(year)
+    year = re.search(r'Popularity in (\d+)', str)
+    year = year.group(1)
+    res.append(year)
 
-  groups = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', str)
+    groups = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>', str)
 
-  for group in groups:
-    res.append(group[1] + ' ' + group[0])
-    res.append(group[2] + ' ' + group[0])
+    for group in groups:
+        res.append(group[1] + ' ' + group[0])
+        res.append(group[2] + ' ' + group[0])
 
-  return sorted(res, key=alpha)
+    return sorted(res, key=alpha)
 
 
 def main():
-  # This command-line parsing code is provided.
-  # Make a list of command line arguments, omitting the [0] element
-  # which is the script itself.
-  args = sys.argv[1:]
+    # This command-line parsing code is provided.
+    # Make a list of command line arguments, omitting the [0] element
+    # which is the script itself.
+    args = sys.argv[1:]
 
-  if not args:
-    print 'usage: [--summaryfile] file [file ...]'
-    sys.exit(1)
+    if not args:
+        print 'usage: [--summaryfile] file [file ...]'
+        sys.exit(1)
 
-  # Notice the summary flag and remove it from args if it is present.
-  summary = False
-  if args[0] == '--summaryfile':
-    summary = True
-    del args[0]
+    # Notice the summary flag and remove it from args if it is present.
+    summary = False
+    if args[0] == '--summaryfile':
+        summary = True
+        del args[0]
 
-  # +++your code here+++
-  # For each filename, get the names, then either print the text output
-  # or write it to a summary file
-  for file in args:
-    names = extract_names(file)
+    # For each filename, get the names, then either print the text output
+    # or write it to a summary file
+    for f in args:
+        print("writing for ", f)
+        names = extract_names(f)
+        lines = '\n'.join(names)
 
-    if summary:
-      f = open('summary.txt', 'w')
-      f.write(names)
-      f.close
-    else:
-      print 'Names for', file
-      print names
+        if summary:
+            f = open(f + '.summary', 'w')
+            f.write(lines + '\n')
+            f.close
+        else:
+            print(lines)
 
 if __name__ == '__main__':
-  main()
+    main()

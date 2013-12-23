@@ -42,7 +42,7 @@ def front_x(words):
   alist = []
 
   for word in words:
-    if word[0] == 'x':
+    if word.startswith('x'):
       xlist.append(word)
     else:
       alist.append(word)
